@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Settings - Result Management System</title>
+    <style>
+      body {
+        background: linear-gradient(135deg, #1a1a2e, #0f3460);
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .settings-container {
+        background: rgba(22, 33, 62, 0.9);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+        position: relative;
+        animation: shieldGlow 3s infinite ease-in-out;
+      }
+      @keyframes shieldGlow {
+        0% {
+          box-shadow: 0 0 10px #e94560;
+        }
+        50% {
+          box-shadow: 0 0 20px #ff6f91, 0 0 30px #ffd700;
+        }
+        100% {
+          box-shadow: 0 0 10px #e94560;
+        }
+      }
+      h1 {
+        color: #ffd700;
+        text-shadow: 0 0 10px #e94560;
+        margin-bottom: 20px;
+      }
+      .timestamp {
+        font-size: 0.85rem;
+        color: #ccc;
+        margin-bottom: 15px;
+      }
+      p {
+        color: #ffd700;
+        font-size: 1rem;
+      }
+      a {
+        color: #ff6f91;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      @media (max-width: 480px) {
+        .settings-container {
+          padding: 20px;
+        }
+        h1 {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="settings-container">
+      <h1>Teacher Settings</h1>
+      <div class="timestamp">Last Updated: August 02, 2025 05:14 PM CEST</div>
+      <p>Welcome, {{ user.username }}! This is your settings page.</p>
+      <p><a href="{% url 'results:change_password' %}">Change Password</a></p>
+      <p><a href="{% url 'results:teacher_home' %}">Back to Home</a></p>
+    </div>
+  </body>
+</html>

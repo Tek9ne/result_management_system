@@ -1,0 +1,13 @@
+# Python and Django
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+venv/
+staticfiles/
+media/
+
+# Sensitive files
+rms_project/settings.py

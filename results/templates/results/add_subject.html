@@ -1,0 +1,71 @@
+{% extends "base.html" %} {% block content %}
+<div class="dashboard" role="main" aria-label="Subject Management">
+  <h1>Manage Subjects</h1>
+  <div class="timestamp">Last Updated: August 01, 2025 11:53 PM CEST</div>
+
+  <!-- Add Subject Form -->
+  <section aria-labelledby="add-subject-heading">
+    <h2 id="add-subject-heading">Add New Subject</h2>
+    <form method="post" action="{% url 'results:add_subject' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="subject-name"></label>
+        <input
+          type="text"
+          name="name"
+          id="subject-name"
+          placeholder="Enter Subject Name (e.g., Mathematics)"
+          required
+          aria-required="true"
+          aria-label="Subject Name"
+          maxlength="100"
+        />
+      </div>
+      <div class="form-actions">
+        <button type="submit" aria-label="Add New Subject">Add Subject</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Remove Subject Section -->
+  <section aria-labelledby="remove-subject-heading">
+    <h2 id="remove-subject-heading">Remove Subject</h2>
+    {% if subjects %}
+    <ul class="subject-list" role="list">
+      {% for subject in subjects %}
+      <li role="listitem">
+        <span class="subject-name">{{ subject.name }}</span>
+        <form
+          method="post"
+          action="{% url 'results:remove_subject' subject.id %}"
+          style="display: inline"
+        >
+          {% csrf_token %}
+          <div class="form-actions">
+            <button
+              type="submit"
+              class="delete-btn"
+              onclick="return confirm('Are you sure you want to delete {{ subject.name }}?');"
+              aria-label="Delete {{ subject.name }}"
+            >
+              Delete
+            </button>
+          </div>
+        </form>
+      </li>
+      {% empty %}
+      <li role="listitem">No subjects available.</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No subjects available to remove.</p>
+    {% endif %}
+  </section>
+
+  <a
+    href="{% url 'results:admin_dashboard' %}"
+    aria-label="Return to Admin Dashboard"
+    >Back to Dashboard</a
+  >
+</div>
+{% endblock %}

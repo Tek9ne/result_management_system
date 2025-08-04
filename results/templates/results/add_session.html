@@ -1,0 +1,154 @@
+{% extends "base.html" %} {% block content %}
+<div class="dashboard">
+  <h1>Add New Academic Session</h1>
+  <div class="timestamp">Last Updated: August 01, 2025 10:27 PM CEST</div>
+  {% if error %}
+  <p style="color: #ff6f91; margin-bottom: 15px">{{ error }}</p>
+  {% endif %} {% if success %}
+  <div
+    class="success-message"
+    style="
+      color: #ffd700;
+      padding: 10px;
+      border-radius: 5px;
+      background: rgba(233, 69, 96, 0.1);
+    "
+  ></div>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="year">Session Year:</label>
+      <input
+        type="text"
+        name="year"
+        id="year"
+        placeholder="e.g., 2025-2026"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="start_date">Start Date:</label>
+      <input type="date" name="start_date" id="start_date" required />
+    </div>
+    <div class="form-group">
+      <label for="end_date">End Date:</label>
+      <input type="date" name="end_date" id="end_date" required />
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+  <a href="{% url 'results:admin_dashboard' %}" class="back-link"
+    >Back to Dashboard</a
+  >
+</div>
+<style>
+  .dashboard {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 25px;
+    background: rgba(22, 33, 62, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+    position: relative;
+    overflow: hidden;
+  }
+  h1 {
+    text-align: center;
+    color: #ffd700;
+    text-shadow: 0 0 10px #e94560;
+    margin-bottom: 15px;
+  }
+  .timestamp {
+    font-size: 0.85rem;
+    color: #ccc;
+    text-align: right;
+    margin-bottom: 20px;
+  }
+  .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #ffd700;
+  }
+  input {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #e94560;
+    border-radius: 5px;
+    background: #1a1a2e;
+    color: #ffd700;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  input:focus {
+    outline: none;
+    border-color: #ff6f91;
+    box-shadow: 0 0 5px rgba(255, 111, 145, 0.5);
+  }
+  button {
+    padding: 10px 20px;
+    background: #e94560;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.3s, background 0.3s;
+  }
+  button:hover {
+    transform: scale(1.05);
+    background: #ff6f91;
+  }
+  .back-link {
+    display: block;
+    margin-top: 15px;
+    color: #ffd700;
+    text-decoration: none;
+    text-align: center;
+    padding: 10px;
+    border: 2px solid #e94560;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+  .back-link:hover {
+    color: #ff6f91;
+    border-color: #ff6f91;
+    background: rgba(255, 111, 145, 0.1);
+  }
+  .success-message {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  @keyframes castSpell {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @media (max-width: 600px) {
+    .dashboard {
+      margin: 20px;
+      padding: 15px;
+    }
+    h1 {
+      font-size: 1.5rem;
+    }
+    input {
+      font-size: 0.9rem;
+    }
+  }
+</style>
+{% endblock %}

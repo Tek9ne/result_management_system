@@ -1,0 +1,261 @@
+{% load static %}
+{% load results_extras %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generate Broadsheet</title>
+    <style>
+      body {
+        background-color: #1a1a2e;
+        color: #ffd700;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 25px;
+        background: #16213e;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      select {
+        margin: 5px 0;
+        padding: 10px;
+        width: 100%;
+        border: 1px solid #e94560;
+        border-radius: 4px;
+        background-color: #1a1a2e;
+        color: #ffd700;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+      select:focus {
+        outline: none;
+        border-color: #ff6f91;
+        box-shadow: 0 0 5px rgba(255, 111, 145, 0.5);
+      }
+      button {
+        padding: 10px 20px;
+        background: #e94560;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+        transition: background 0.3s ease;
+      }
+      button:hover {
+        background: #ff6f91;
+      }
+      a {
+        display: inline-block;
+        margin-top: 15px;
+        color: #ffd700;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      a:hover {
+        color: #ff6f91;
+      }
+      .broadsheet-header {
+        display: {% if students %} block {% else %} none {% endif %};
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+        clear: both;
+      }
+      .broadsheet-header img {
+        max-width: 100px;
+        height: auto;
+        vertical-align: middle;
+      }
+      .broadsheet-header .left-logo {
+        float: left;
+      }
+      .broadsheet-header .right-logo {
+        float: right;
+      }
+      .broadsheet-table {
+        display: {% if students %} block {% else %} none {% endif %};
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      .broadsheet-table th,
+      .broadsheet-table td {
+        border: 1px solid #ffd700;
+        padding: 10px;
+        text-align: center;
+      }
+      .broadsheet-table th {
+        background-color: #16213e;
+        font-weight: bold;
+      }
+      .broadsheet-table td {
+        background-color: #1a1a2e;
+      }
+      .error {
+        color: #ff6f91;
+        margin-bottom: 15px;
+      }
+      .best-student {
+        margin-top: 20px;
+        padding: 10px;
+        background: #16213e;
+        border-radius: 5px;
+      }
+      @media (max-width: 600px) {
+        .container {
+          margin: 20px;
+          padding: 15px;
+        }
+        .broadsheet-table {
+          font-size: 0.9rem;
+        }
+        .broadsheet-header img {
+          max-width: 80px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Generate Broadsheet</h2>
+      {% if error %}
+        <p class="error">{{ error }}</p>
+      {% endif %}
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="department">Select Sections:</label>
+          <select name="department" id="department">
+            <option value="">Select Section</option>
+            {% for dept in departments %}
+              <option value="{{ dept.id }}" {% if dept.id|stringformat:"s" == request.POST.department|stringformat:"s" %}selected{% endif %}>
+                {{ dept.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="class">Select Classes:</label>
+          <select name="class" id="class">
+            <option value="">Select Class</option>
+            {% for cls in classes %}
+              <option value="{{ cls.id }}" {% if cls.id|stringformat:"s" == request.POST.class|stringformat:"s" %}selected{% endif %}>
+                {{ cls.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="term">Select Term:</label>
+          <select name="term" id="term" required>
+            <option value="">Select Term</option>
+            {% for term in terms %}
+              <option value="{{ term.id }}" {% if term.id|stringformat:"s" == request.POST.term|stringformat:"s" %}selected{% endif %}>
+                {{ term.name }} - {{ term.session.year }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" name="pdf_export">Export as PDF</button>
+        <button type="submit" name="excel_export">Export as Excel</button>
+      </form>
+      <a href="{% url 'results:admin_dashboard' %}">Back</a>
+
+      {% if students %}
+        <div class="broadsheet-header">
+          <img src="{% static 'images/school_logo.png' %}" alt="School Logo" class="left-logo" />
+          <img src="{% static 'images/secondary_logo.png' %}" alt="Secondary Logo" class="right-logo" />
+          <h3 style="display: inline; color: #ffd700">
+            Broadsheet - {% if terms|length > 0 %}{{ terms|first }}.name{% else %}Unknown Term{% endif %}
+            {% if terms|length > 0 %}{{ terms|first }}.session.year{% else %}Unknown Year{% endif %}
+            - {{ current_date|default:"August 01, 2025 08:38 PM CEST" }}
+          </h3>
+        </div>
+        <table class="broadsheet-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Roll No</th>
+              <th>Department</th>
+              <th>Class</th>
+              <th>Subject</th>
+              <th>CA</th>
+              <th>Exam</th>
+              <th>Total</th>
+              <th>Grade</th>
+              <th>Remarks</th>
+              <th>Position</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in students %}
+              {% for score in scores|filter_student:student.id %}
+                <tr>
+                  <td>{{ student.username }}</td>
+                  <td>{{ student.profile.roll_number|default:'N/A' }}</td>
+                  <td>{{ student.profile.department.name|default:'N/A' }}</td>
+                  <td>{{ student.profile.class_assigned.name|default:'N/A' }}</td>
+                  <td>{{ score.subject.name }}</td>
+                  <td>{{ score.ca_score }}</td>
+                  <td>{{ score.exam_score }}</td>
+                  <td>{{ score.total_score }}</td>
+                  <td>{{ score.grade }}</td>
+                  <td>{{ score.remarks }}</td>
+                  <td>{{ score.subject_position|default:'N/A' }}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="11">No scores available for {{ student.username }}</td>
+                </tr>
+              {% endfor %}
+              {% for result in results %}
+                {% if result.student == student %}
+                  <tr>
+                    <td colspan="6"></td>
+                    <td>Total</td>
+                    <td>{{ result.total_score }}</td>
+                    <td></td>
+                    <td>{{ result.class_position|default:'N/A' }}</td>
+                    <td></td>
+                  </tr>
+                {% endif %}
+              {% endfor %}
+            {% empty %}
+              <tr>
+                <td colspan="11">No students or data available</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="best-student">
+          <h4>Best Students</h4>
+          {% for section, data in best_in_section.items %}
+            <p>Best in {{ section }}: {{ data.student }} (Score: {{ data.score }})</p>
+          {% empty %}
+            <p>No best student data available.</p>
+          {% endfor %}
+          {% if overall_best %}
+            <p>Overall Best Student: {{ overall_best.student.username }} (Score: {{ overall_best.total_score }})</p>
+          {% else %}
+            <p>No overall best student data available.</p>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </body>
+</html>

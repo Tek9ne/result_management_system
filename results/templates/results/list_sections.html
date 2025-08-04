@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>List Sections</title>
+    <style>
+      body {
+        background-color: #1a1a2e;
+        color: #ffd700;
+        font-family: Arial;
+      }
+      .container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #16213e;
+        border-radius: 10px;
+      }
+      .section-item {
+        margin: 10px 0;
+        padding: 5px;
+        background: #2b2d42;
+        border-radius: 3px;
+      }
+      a {
+        margin: 0 5px;
+        color: #e94560;
+        text-decoration: none;
+      }
+      a:hover {
+        color: #ff6f91;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Sections</h2>
+      {% for section in sections %}
+      <div class="section-item">
+        {{ section.name }}
+        <a href="{% url 'edit_department' section.id %}">Edit</a>
+        <a href="{% url 'delete_department' section.id %}">Delete</a>
+      </div>
+      {% empty %}
+      <p>
+        No sections found. <a href="{% url 'add_section' %}">Add a section</a>.
+      </p>
+      {% endfor %}
+      <a href="{% url 'admin_home' %}">Back</a>
+    </div>
+  </body>
+</html>

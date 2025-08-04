@@ -1,0 +1,31 @@
+{% extends "base.html" %} {% block content %}
+<div class="dashboard" role="main" aria-label="Term Management">
+  <h1>Manage Terms</h1>
+  <form method="post" action="">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="term-name"></label>
+      <select
+        name="name"
+        id="term-name"
+        required
+        aria-required="true"
+        aria-label="Term Name"
+      >
+        <option value="" disabled selected>Select a term</option>
+        <option value="First Term">First Term</option>
+        <option value="Second Term">Second Term</option>
+        <option value="Third Term">Third Term</option>
+      </select>
+    </div>
+    <div class="form-actions">
+      <button type="submit" aria-label="Add Selected Term">Submit</button>
+    </div>
+  </form>
+  <a
+    href="{% url 'results:admin_dashboard' %}"
+    aria-label="Return to Admin Dashboard"
+    >Back to Dashboard</a
+  >
+</div>
+{% endblock %}

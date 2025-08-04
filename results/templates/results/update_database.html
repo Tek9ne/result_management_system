@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Database</title>
+    <style>
+      body {
+        background: linear-gradient(135deg, #1a1a2e, #0f0c29);
+        color: #e0e0e0;
+        font-family: "Courier New", Courier, monospace;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .container {
+        background: rgba(22, 33, 62, 0.9);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        text-align: center;
+        max-width: 500px;
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        }
+        50% {
+          box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+        100% {
+          box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        }
+      }
+      h1 {
+        color: #00ffff;
+        text-shadow: 0 0 10px #00ffff;
+        margin-bottom: 1.5rem;
+      }
+      .timestamp {
+        font-size: 0.9rem;
+        color: #b3e5fc;
+        margin-bottom: 1rem;
+      }
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+      select {
+        padding: 0.5rem;
+        width: 100%;
+        background: #1a1a2e;
+        border: 1px solid #00ffff;
+        color: #e0e0e0;
+        border-radius: 5px;
+      }
+      button {
+        padding: 0.7rem 1.5rem;
+        background: linear-gradient(45deg, #00ffff, #00cccc);
+        color: #000;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: transform 0.3s ease;
+      }
+      button:hover {
+        transform: scale(1.1);
+      }
+      .message {
+        color: #00ff00;
+        font-style: italic;
+        margin-top: 1rem;
+        text-shadow: 0 0 5px #00ff00;
+      }
+      .error {
+        color: #ff4444;
+        margin-top: 1rem;
+        text-shadow: 0 0 5px #ff4444;
+      }
+      a {
+        display: inline-block;
+        margin-top: 1rem;
+        color: #00ffff;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s ease;
+      }
+      a:hover {
+        color: #b3e5fc;
+        text-shadow: 0 0 10px #b3e5fc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Time Capsule Activation</h1>
+      <div class="timestamp">Activated: August 01, 2025 03:54 PM CEST</div>
+      {% if error %}
+      <p class="error">{{ error }}</p>
+      {% endif %} {% if message %}
+      <p class="message">{{ message }}</p>
+      {% endif %}
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="term">Select Term to Capsule:</label>
+          <select name="term" id="term">
+            <option value="">-- Select Term --</option>
+            {% for term in terms %}
+            <option value="{{ term.id }}">
+              {{ term.name }} - {{ term.session.year }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit">Seal Time Capsule</button>
+      </form>
+      <a href="{% url 'results:admin_dashboard' %}">Back to Control Panel</a>
+    </div>
+  </body>
+</html>

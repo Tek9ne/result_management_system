@@ -1,0 +1,411 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher's Enchanted Dashboard</title>
+    <style>
+      body {
+        background: linear-gradient(135deg, #1a1a2e, #0f3460);
+        color: #ffd700;
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 20px;
+        overflow-x: hidden;
+      }
+      .dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: rgba(22, 33, 62, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+        position: relative;
+      }
+      h1 {
+        text-align: center;
+        color: #ffd700;
+        text-shadow: 0 0 10px #ffd700, 0 0 20px #e94560;
+        animation: glow 2s ease-in-out infinite alternate;
+      }
+      @keyframes glow {
+        from { text-shadow: 0 0 10px #ffd700, 0 0 20px #e94560; }
+        to { text-shadow: 0 0 20px #ffd700, 0 0 30px #ff6f91; }
+      }
+      .timestamp {
+        font-size: 0.85rem;
+        color: #ccc;
+        margin-bottom: 15px;
+        text-align: right;
+      }
+      .section {
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(83, 53, 74, 0.8);
+        border-radius: 8px;
+        transition: transform 0.3s ease;
+      }
+      .section:hover {
+        transform: translateY(-5px);
+      }
+      .upload-zone {
+        border: 2px dashed #ffd700;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+      .upload-zone.dragover {
+        background: #ffd700;
+        color: #1a1a2e;
+        box-shadow: 0 0 15px #ffd700;
+      }
+      .upload-zone.dragover::after {
+        content: "✨ Drop to Cast the Spell! ✨";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: sparkle 1s infinite;
+      }
+      @keyframes sparkle {
+        0% { opacity: 0; }
+        50% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+      .table-container {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(46, 46, 72, 0.9);
+      }
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ffd700;
+        transition: background 0.3s;
+      }
+      th {
+        background: #e94560;
+        color: #fff;
+      }
+      td:hover {
+        background: rgba(255, 215, 0, 0.1);
+      }
+      .action-btn {
+        padding: 8px 15px;
+        margin: 2px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.3s, background 0.3s;
+      }
+      .edit-btn {
+        background: #ffd700;
+        color: #1a1a2e;
+      }
+      .edit-btn:hover {
+        transform: scale(1.1);
+        background: #ffec5c;
+      }
+      .delete-btn {
+        background: #ff6f91;
+        color: #fff;
+      }
+      .delete-btn:hover {
+        transform: scale(1.1);
+        background: #ff4d70;
+      }
+      .subject-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .subject-item {
+        padding: 8px 15px;
+        background: #e94560;
+        color: #fff;
+        border-radius: 5px;
+        cursor: move;
+        transition: opacity 0.5s ease;
+      }
+      .subject-item.dragging {
+        opacity: 0.5;
+      }
+      .student-subjects {
+        margin-top: 10px;
+        padding: 10px;
+        background: rgba(46, 46, 72, 0.9);
+        border-radius: 5px;
+        min-height: 50px;
+      }
+      .magic-wand {
+        padding: 10px 20px;
+        background: #ffd700;
+        color: #1a1a2e;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 10px;
+        transition: transform 0.3s, background 0.3s;
+      }
+      .magic-wand:hover {
+        transform: rotate(15deg) scale(1.1);
+        background: #ffec5c;
+      }
+      .achievement-badge {
+        display: {% if teacher_of_month %} block {% else %} none {% endif %};
+        margin-top: 15px;
+        padding: 10px;
+        background: #ffd700;
+        color: #1a1a2e;
+        border-radius: 8px;
+        font-weight: bold;
+        animation: bounce 1s ease;
+        text-align: center;
+      }
+      @keyframes bounce {
+        0% { transform: scale(0); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+      }
+      a {
+        color: #ffd700;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+      }
+      a:hover {
+        color: #ffec5c;
+        text-decoration: underline;
+      }
+      @media (max-width: 768px) {
+        .dashboard {
+          padding: 15px;
+        }
+        table {
+          font-size: 0.9rem;
+        }
+        .subject-item {
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const dropZone = document.querySelector(".upload-zone");
+        const subjectItems = document.querySelectorAll(".subject-item");
+        const magicWand = document.querySelector(".magic-wand");
+        let draggedItem = null;
+
+        // Upload Zone Logic
+        dropZone.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          dropZone.classList.add("dragover");
+        });
+
+        dropZone.addEventListener("dragleave", () => {
+          dropZone.classList.remove("dragover");
+        });
+
+        dropZone.addEventListener("drop", (e) => {
+          e.preventDefault();
+          dropZone.classList.remove("dragover");
+          const files = e.dataTransfer.files;
+          if (files.length > 0) {
+            const formData = new FormData();
+            formData.append("excel_file", files[0]);
+            fetch("/upload_scores/", {
+              method: "POST",
+              body: formData,
+              headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.success) alert("Results uploaded with magic! ✨");
+                else alert("Upload failed, oh no! 🪄");
+                location.reload();
+              });
+          }
+        });
+
+        // Drag and Drop for Subjects
+        subjectItems.forEach((item) => {
+          item.addEventListener("dragstart", (e) => {
+            draggedItem = item;
+            item.classList.add("dragging");
+          });
+
+          item.addEventListener("dragend", () => {
+            draggedItem.classList.remove("dragging");
+            draggedItem = null;
+          });
+        });
+
+        document.querySelectorAll(".student-subjects").forEach((container) => {
+          container.addEventListener("dragover", (e) => e.preventDefault());
+          container.addEventListener("drop", (e) => {
+            e.preventDefault();
+            if (draggedItem) {
+              const studentId = container.dataset.studentId;
+              const subjectId = draggedItem.dataset.subjectId;
+              fetch(`/assign_subject/${studentId}/${subjectId}/`, {
+                method: "POST",
+                headers: {
+                  "X-CSRFToken": "{{ csrf_token }}",
+                  "Content-Type": "application/json",
+                },
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.success) {
+                    container.innerHTML += `<div class="subject-item">${draggedItem.textContent}</div>`;
+                    draggedItem.style.opacity = "0";
+                    setTimeout(() => (draggedItem.style.display = "none"), 500);
+                    location.reload();
+                  }
+                });
+            }
+          });
+        });
+
+        // Magic Wand Logic
+        magicWand.addEventListener("click", () => {
+          const students = document.querySelectorAll(".student-subjects");
+          const subjects = document.querySelectorAll(
+            ".subject-item:not([style*='display: none'])"
+          );
+          if (students.length && subjects.length) {
+            students.forEach((student) => {
+              const randomSubject =
+                subjects[Math.floor(Math.random() * subjects.length)];
+              const studentId = student.dataset.studentId;
+              const subjectId = randomSubject.dataset.subjectId;
+              fetch(`/assign_subject/${studentId}/${subjectId}/`, {
+                method: "POST",
+                headers: {
+                  "X-CSRFToken": "{{ csrf_token }}",
+                  "Content-Type": "application/json",
+                },
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.success) {
+                    student.innerHTML += `<div class="subject-item">${randomSubject.textContent}</div>`;
+                    randomSubject.style.opacity = "0";
+                    setTimeout(
+                      () => (randomSubject.style.display = "none"),
+                      500
+                    );
+                  }
+                });
+            });
+            setTimeout(() => location.reload(), 1000);
+          } else {
+            alert("No students or subjects to assign! 🪄");
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="dashboard">
+      <h1>Teacher's Enchanted Dashboard</h1>
+      <div class="timestamp">Last Updated: August 01, 2025 09:07 PM CEST</div>
+      <div class="section">
+        <h2>Upload Student Results</h2>
+        <div
+          class="upload-zone"
+          ondragover="event.preventDefault();"
+          ondrop="event.preventDefault();"
+        >
+          Drag and drop an Excel file here, or click to upload!<br />
+          (Format: student_username, subject_name, term_name, ca_score,
+          exam_score)
+        </div>
+      </div>
+      <div class="section">
+        <h2>Student Results</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Subject</th>
+                <th>Term</th>
+                <th>CA Score</th>
+                <th>Exam Score</th>
+                <th>Total</th>
+                <th>Grade</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for score in scores %}
+              <tr>
+                <td>{{ score.student.username }}</td>
+                <td>{{ score.subject.name }}</td>
+                <td>{{ score.term.name }} {{ score.term.session.year }}</td>
+                <td>{{ score.ca_score }}</td>
+                <td>{{ score.exam_score }}</td>
+                <td>{{ score.total_score }}</td>
+                <td>{{ score.grade }}</td>
+                <td>
+                  <button
+                    class="action-btn edit-btn"
+                    onclick="window.location.href='/edit_score/{{ score.id }}/'"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    class="action-btn delete-btn"
+                    onclick="if(confirm('Delete this score?')) window.location.href='/delete_score/{{ score.id }}/'"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="section">
+        <h2>Assign Subjects to Students</h2>
+        <button class="magic-wand">✨ Wave Magic Wand!</button>
+        <div class="subject-list">
+          {% for subject in subjects %}
+          <div
+            class="subject-item"
+            draggable="true"
+            data-subject-id="{{ subject.id }}"
+          >
+            {{ subject.name }}
+          </div>
+          {% endfor %}
+        </div>
+        {% for student in students %}
+        <div class="student-subjects" data-student-id="{{ student.id }}">
+          <h3>{{ student.username }}'s Subjects</h3>
+          {% for student_subject in student.profile.studentsubject_set.all %}
+          <div class="subject-item">{{ student_subject.subject.name }}</div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+      <a href="{% url 'logout' %}">Logout</a>
+      <a href="{% url 'teacher_settings' %}">Settings</a>
+    </div>
+  </body>
+</html>

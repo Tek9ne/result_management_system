@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Spell - Result Management System</title>
+    <style>
+      body {
+        background: linear-gradient(135deg, #1a1a2e, #0f3460);
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .security-container {
+        background: rgba(22, 33, 62, 0.9);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+        position: relative;
+        animation: shieldGlow 3s infinite ease-in-out;
+      }
+      @keyframes shieldGlow {
+        0% {
+          box-shadow: 0 0 10px #e94560;
+        }
+        50% {
+          box-shadow: 0 0 20px #ff6f91, 0 0 30px #ffd700;
+        }
+        100% {
+          box-shadow: 0 0 10px #e94560;
+        }
+      }
+      h1 {
+        color: #ffd700;
+        text-shadow: 0 0 10px #e94560;
+        margin-bottom: 20px;
+      }
+      .timestamp {
+        font-size: 0.85rem;
+        color: #ccc;
+        margin-bottom: 15px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        color: #ffd700;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+      }
+      input {
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #e94560;
+        border-radius: 5px;
+        background: #1a1a2e;
+        color: #ffd700;
+        font-size: 1rem;
+      }
+      button {
+        padding: 10px 20px;
+        background: #e94560;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: transform 0.3s;
+      }
+      button:hover {
+        transform: scale(1.05);
+        background: #ff6f91;
+      }
+      .error {
+        color: #ff6f91;
+        margin-top: 10px;
+      }
+      @media (max-width: 480px) {
+        .security-container {
+          padding: 20px;
+        }
+        h1 {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="security-container">
+      <h1>Security</h1>
+      <div class="timestamp">Last Updated: August 02, 2025 10:01 AM CEST</div>
+      {% if error %}
+      <p class="error">{{ error }}</p>
+      {% endif %}
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="otp_code">Enter Your Code:</label>
+          <input type="text" name="otp_code" id="otp_code" required />
+        </div>
+        <button type="submit">Activate Shield</button>
+      </form>
+    </div>
+  </body>
+</html>

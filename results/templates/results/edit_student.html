@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student</title>
+    <style>
+        body { background-color: #1a1a2e; color: #ffd700; font-family: Arial; }
+        .container { max-width: 400px; margin: 50px auto; padding: 20px; background: #16213e; border-radius: 10px; }
+        input, select, textarea, button { margin: 10px 0; padding: 5px; }
+        button { background: #e94560; color: #fff; border: none; border-radius: 3px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Edit Student</h2>
+        {% if error %}
+            <p style="color: #ff6f91;">{{ error }}</p>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" name="school_code" value="{{ student.username|split:'/'|first }}" required>
+            <input type="text" name="section" value="{{ student.username|split:'/'|get_item:1 }}" required>
+            <input type="text" name="student_number" value="{{ student.username|split:'/'|get_item:2 }}" required>
+            <input type="text" name="first_name" value="{{ student.first_name|default:'' }}" required>
+            <input type="text" name="roll_number" value="{{ student.profile.roll_number }}" required>
+            <input type="text" name="phone_number" value="{{ student.profile.phone_number|default:'' }}" required>
+            <textarea name="home_address" required>{{ student.profile.home_address|default:'' }}</textarea>
+            <input type="file" name="avatar" accept="image/*">
+            {% if student.profile.avatar %}
+                <p>Current Avatar: <img src="{{ student.profile.avatar.url }}" width="100"></p>
+            {% endif %}
+            <select name="department" required>
+                <option value="">Select Section</option>
+                {% for dept in departments %}
+                    <option value="{{ dept.id }}" {% if student.profile.department.id == dept.id %}selected{% endif %}>{{ dept.name }}</option>
+                {% endfor %}
+            </select>
+            <select name="class" required>
+                <option value="">Select Class</option>
+                {% for cls in classes %}
+                    <option value="{{ cls.id }}" {% if student.profile.class_assigned.id == cls.id %}selected{% endif %}>{{ cls.name }}</option>
+                {% endfor %}
+            </select>
+            <select name="subjects" multiple>
+                {% for subject in subjects %}
+                    <option value="{{ subject.id }}" {% if subject in student.profile.subjects.all %}selected{% endif %}>{{ subject.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Update Student</button>
+        </form>
+        <a href="{% url 'admin_home' %}">Back</a>
+    </div>
+</body>
+</html>

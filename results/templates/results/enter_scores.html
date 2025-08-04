@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Enter Scores</title>
+  </head>
+  <body>
+    <h1>Enter Scores</h1>
+    <form method="post">
+      {% csrf_token %}
+      <select name="student">
+        {% for student in students %}
+        <option value="{{ student.id }}">{{ student.username }}</option>
+        {% endfor %}</select
+      ><br />
+      <select name="subject">
+        {% for subject in subjects %}
+        <option value="{{ subject.id }}">{{ subject.name }}</option>
+        {% endfor %}</select
+      ><br />
+      <select name="term">
+        {% for term in terms %}
+        <option value="{{ term.id }}">{{ term }}</option>
+        {% endfor %}</select
+      ><br />
+      <input
+        type="number"
+        name="ca_score"
+        placeholder="CA Score (0-40)"
+        max="40"
+        required
+      /><br />
+      <input
+        type="number"
+        name="exam_score"
+        placeholder="Exam Score (0-60)"
+        max="60"
+        required
+      /><br />
+      <button type="submit">Save</button>
+    </form>
+  </body>
+</html>

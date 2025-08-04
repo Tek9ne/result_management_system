@@ -1,0 +1,11 @@
+{% extends "base.html" %} {% block content %}
+<div class="dashboard">
+  <h1>Lock Result</h1>
+  <form method="post">
+    {% csrf_token %}
+    <p>Placeholder form for locking results.</p>
+    <button type="submit">Submit</button>
+  </form>
+  <a href="{% url 'results:admin_dashboard' %}">Back to Dashboard</a>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Result Management System{% endblock %}</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #d5e1e9, #a3bffa);
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .dashboard {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        max-width: 900px;
+        text-align: center;
+      }
+      h1 {
+        color: #1a2a44;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+      button {
+        padding: 0.7rem 1.5rem;
+        background: linear-gradient(45deg, #2980b9, #2c3e50);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: linear-gradient(45deg, #2c3e50, #2980b9);
+      }
+      a {
+        color: #2980b9;
+        text-decoration: none;
+        margin-left: 1rem;
+      }
+      a:hover {
+        color: #1a5276;
+      }
+    </style>
+  </head>
+  <body>
+    {% block content %} {% endblock %}
+  </body>
+</html>
