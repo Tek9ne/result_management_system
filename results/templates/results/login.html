@@ -1,115 +1,168 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Login - Result Management System</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{% static 'images/favicon.ico' %}"
+    />
+    <link rel="apple-touch-icon" href="{% static 'images/favicon.ico' %}" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f0f4f8, #d6e4f0);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            animation: bgShift 10s infinite;
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #f0f4f8, #d6e4f0);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        animation: bgShift 10s infinite;
+      }
+      @keyframes bgShift {
+        0% {
+          background-position: 0% 50%;
         }
-        @keyframes bgShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        50% {
+          background-position: 100% 50%;
         }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      .login-container {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 2.5rem;
+        border-radius: 15px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 420px;
+        text-align: center;
+        animation: float 3s ease-in-out infinite;
+        box-sizing: border-box;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      .logo {
+        max-width: 160px;
+        margin-bottom: 1.5rem;
+        animation: spin 4s linear infinite;
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      h1 {
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        font-size: 2.2rem;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      }
+      .form-group {
+        margin-bottom: 1.2rem;
+        text-align: left;
+      }
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 0.6rem;
+        margin-top: 0.3rem;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+      }
+      input[type="text"]:focus,
+      input[type="password"]:focus {
+        border-color: #3498db;
+        outline: none;
+      }
+      button {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #2980b9;
+      }
+      .error {
+        color: #e74c3c;
+        margin-top: 1rem;
+        font-size: 0.95rem;
+        background-color: #ffebee;
+        padding: 0.5rem;
+        border-radius: 4px;
+      }
+      @media (max-width: 600px) {
         .login-container {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 2.5rem;
-            border-radius: 15px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        .logo {
-            max-width: 160px;
-            margin-bottom: 1.5rem;
-            animation: spin 4s linear infinite;
-        }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+          padding: 1.5rem;
+          max-width: 90%;
         }
         h1 {
-            color: #2c3e50;
-            margin-bottom: 1.5rem;
-            font-size: 2.2rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        .form-group {
-            margin-bottom: 1.2rem;
-            text-align: left;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 0.6rem;
-            margin-top: 0.3rem;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-        input[type="text"]:focus, input[type="password"]:focus {
-            border-color: #3498db;
-            outline: none;
+          font-size: 1.8rem;
         }
         button {
-            width: 100%;
-            padding: 0.8rem;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: background-color 0.3s;
+          font-size: 1rem;
         }
-        button:hover {
-            background-color: #2980b9;
-        }
-        .error {
-            color: #e74c3c;
-            margin-top: 1rem;
-            font-size: 0.95rem;
-            background-color: #ffebee;
-            padding: 0.5rem;
-            border-radius: 4px;
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="login-container">
-        <img src="{% static 'images/school_logo.png' %}" alt="School Logo" class="logo">
-        <h1>Login to Result System</h1>
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" name="username" id="username" placeholder="Enter Username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" name="password" id="password" placeholder="Enter Password" required>
-            </div>
-            <button type="submit">Login</button>
-            {% if error %}
-                <p class="error">{{ error }}</p>
-            {% endif %}
-        </form>
+      <img
+        src="{% static 'images/school_logo.png' %}"
+        alt="School Logo"
+        class="logo"
+      />
+      <h1>Login to Result System</h1>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Enter Username"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Enter Password"
+            required
+          />
+        </div>
+        <button type="submit">Login</button>
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+      </form>
     </div>
-</body>
+  </body>
 </html>

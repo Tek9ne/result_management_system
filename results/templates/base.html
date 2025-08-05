@@ -4,14 +4,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>{% block title %}Result Management System{% endblock %}</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{% static 'images/favicon.ico' %}"
+    />
+    <link rel="apple-touch-icon" href="{% static 'images/favicon.ico' %}" />
     <style>
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #d5e1e9, #a3bffa);
         margin: 0;
         padding: 0;
-        height: 100vh;
+        min-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -24,6 +31,7 @@
         width: 90%;
         max-width: 900px;
         text-align: center;
+        box-sizing: border-box;
       }
       h1 {
         color: #1a2a44;
@@ -37,6 +45,7 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
+        font-size: 1rem;
       }
       button:hover {
         background: linear-gradient(45deg, #2c3e50, #2980b9);
@@ -45,9 +54,23 @@
         color: #2980b9;
         text-decoration: none;
         margin-left: 1rem;
+        font-size: 1rem;
       }
       a:hover {
         color: #1a5276;
+      }
+      @media (max-width: 600px) {
+        .dashboard {
+          padding: 1rem;
+          width: 95%;
+        }
+        h1 {
+          font-size: 1.5rem;
+        }
+        button,
+        a {
+          font-size: 0.9rem;
+        }
       }
     </style>
   </head>
