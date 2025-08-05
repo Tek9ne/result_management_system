@@ -19,14 +19,14 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'whitenoise.runserver_nostatic',  # Add for static files
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'results.apps.ResultsConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add for static files
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -59,9 +59,9 @@ WSGI_APPLICATION = 'rms_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'govrcomp_rms_db',
-        'USER': 'govrcomp_rms_user',
-        'PASSWORD': ',0XZo.d]C,KV=Y1)!',
+        'NAME': 'govrcom2_rms_db',
+        'USER': 'govrcom2_rms_user',
+        'PASSWORD': 'P@ssw0rd123',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
@@ -90,7 +90,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'results' / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # For WhiteNoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
 MEDIA_URL = '/media/'
@@ -107,7 +107,7 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True
 
-# Email settings (for production)
+# Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -115,11 +115,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'your-email@gmail.com'
 EMAIL_HOST_PASSWORD = 'your-app-specific-password'
 DEFAULT_FROM_EMAIL = 'your-email@gmail.com'
-
-# To use real emails with 2FA:
-# 1. Enable 2-Step Verification at https://myaccount.google.com/security
-# 2. Go to "App passwords", select "Mail" and "Other (Django RMS)"
-# 3. Copy the 16-character password and paste it into EMAIL_HOST_PASSWORD
 
 # 2FA settings
 ENABLE_2FA = False
@@ -129,4 +124,4 @@ LOGIN_URL = '/results/login/'
 LOGIN_REDIRECT_URL = '/results/admin_dashboard/'
 
 # Timestamp
-# Last Updated: August 05, 2025 09:48 PM CEST
+# Last Updated: August 05, 2025 11:41 PM CEST
